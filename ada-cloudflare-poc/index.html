@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ADA Controlled Test</title><link rel="stylesheet" href="/style.css"></head>
+<body><main><h1>ADA Controlled Test</h1><p id="marker">Marker: ADA-CF-STATIC-2026</p><p id="js-status">JavaScript has not executed</p><img src="/pixel.svg" alt="Controlled image resource"><iframe src="/frame.html" title="Controlled iframe"></iframe></main>
+<script>
+(() => {
+ const t = new URLSearchParams(location.search).get('t') || 'manual';
+ document.getElementById('js-status').textContent = 'JavaScript executed; token=' + t;
+ const url = '/api/log?kind=javascript&t=' + encodeURIComponent(t);
+ fetch(url, {mode:'same-origin',cache:'no-store'}).catch(() => {});
+})();
+</script></body></html>
