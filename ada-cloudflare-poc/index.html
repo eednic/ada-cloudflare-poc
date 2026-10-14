@@ -1,11 +1,56 @@
+
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ADA Controlled Test</title><link rel="stylesheet" href="/style.css"></head>
-<body><main><h1>ADA Controlled Test</h1><p id="marker">Marker: ADA-CF-STATIC-2026</p><p id="js-status">JavaScript has not executed</p><img src="/pixel.svg" alt="Controlled image resource"><iframe src="/frame.html" title="Controlled iframe"></iframe></main>
-<script>
-(() => {
- const t = new URLSearchParams(location.search).get('t') || 'manual';
- document.getElementById('js-status').textContent = 'JavaScript executed; token=' + t;
- const url = '/api/log?kind=javascript&t=' + encodeURIComponent(t);
- fetch(url, {mode:'same-origin',cache:'no-store'}).catch(() => {});
-})();
-</script></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ADA JavaScript Execution Test</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main>
+    <h1>ADA JavaScript Execution Test</h1>
+
+    <p id="marker">Marker: ADA-CF-JS-TEST-2026</p>
+
+    <p id="js-status">JavaScript has not executed</p>
+
+    <img
+      id="js-execution-proof"
+      src="/pixel.svg"
+      alt="Accessible test image"
+    >
+
+    <iframe
+      src="/frame.html"
+      title="Controlled test iframe">
+    </iframe>
+  </main>
+
+  <script>
+    (() => {
+      const params = new URLSearchParams(window.location.search);
+      const token = params.get("t") || "manual";
+
+      const status = document.getElementById("js-status");
+      const proof = document.getElementById("js-execution-proof");
+
+      // Update visible content when JavaScript executes.
+      status.textContent = "JavaScript executed; token=" + token;
+
+      // Deliberately introduce an accessibility violation.
+      // axe-core should report image-alt if this script runs.
+      proof.removeAttribute("alt");
+
+      // Optional beacon for external request logging.
+      fetch(
+        "/api/log?kind=javascript&t=" + encodeURIComponent(token),
+        {
+          mode: "same-origin",
+          cache: "no-store"
+        }
+      ).catch(() => {});
+    })();
+  </script>
+</body>
+</html>
